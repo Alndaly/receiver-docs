@@ -1,0 +1,65 @@
+# 接口
+
+前缀：https://api.receiver.qingyon.com/tp
+
+请携带 `API-KEY` 头部，值为你的 API key。
+
+## 发送通知
+
+链接：`/send`
+
+请求方式：`POST`
+
+请求参数（JSON体）：
+
+| 参数名        | 类型   | 必填 | 说明                                                                             |
+| ------------- | ------ | ---- | -------------------------------------------------------------------------------- |
+| title         | string | 是   | 通知标题                                                                         |
+| subtitle      | string | 否   | 通知副标题                                                                       |
+| body          | string | 是   | 通知内容                                                                         |
+| category      | string | 否   | 通知类型，可选值：`info`（普通通知）、`error`（错误通知）、`warning`（警告通知） |
+| cover         | string | 否   | 通知封面图片链接                                                                 |
+| sender_avatar | string | 否   | 发送者头像图片链接，如果不传这一项或者则只显示应用图标                           |
+
+请求范例：
+
+```python
+import httpx
+
+async def main():
+    with httpx.Client() as client:
+        response = client.post(
+            "https://api.receiver.qingyon.com/tp/send",
+            json={
+                "title": "测试应用",
+                "subtitle": "这是一条测试应用信息。",
+                "body": "这是一条测试应用信息。",
+                "category": "info",
+                "cover": "图片链接，将会显示在通知右侧",
+                "sender_avatar": "图片链接，将会合并应用图标显示在通知左侧，如果不传这一项或者则只显示应用图标",
+            },
+            headers={"API-KEY": "你的apikey"},
+        )
+        print(response.json())
+
+if __name__ == "__main__":
+    import asyncio
+
+    asyncio.run(main())
+```
+
+返回参数：
+
+| 参数名  | 类型   | 说明     |
+| ------- | ------ | -------- |
+| success | 布尔   | 是否成功 |
+| message | string | 具体信息 |
+
+返回值范例：
+
+```json
+{
+    "success": true,
+    "message": "Success"
+}
+```
