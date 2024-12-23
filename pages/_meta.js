@@ -3,16 +3,18 @@ export default {
         title: 'Home',
         type: 'page'
     },
-    github: {
-        title: 'Github',
-        type: 'page',
-        href: 'https://github.com/Alndaly/receiver-docs',
-        newWindow: true
+    document: {
+        title: 'Docs',
+        type: 'page'
+    },
+    'about-us': {
+        title: 'About',
+        type: 'page'
     },
     control: {
-        title: 'Receiver',
+        title: 'Receiver Web',
         type: 'page',
         href: 'https://receiver.qingyon.com',
         newWindow: true
-    }
+    },
 }
