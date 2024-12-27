@@ -1,4 +1,4 @@
-# 接口
+# API文档
 
 前缀：https://api.receiver.qingyon.com/tp
 
@@ -6,18 +6,18 @@
 
 ## 发送通知
 
-链接：`/send`
+链接：`/notification/send`
 
 请求方式：`POST`
 
-请求参数（JSON体）：
+请求参数（JSON 体）：
 
 | 参数名        | 类型   | 必填 | 说明                                                                             |
 | ------------- | ------ | ---- | -------------------------------------------------------------------------------- |
 | title         | string | 是   | 通知标题                                                                         |
-| subtitle      | string | 否   | 通知副标题                                                                       |
+| subtitle      | string | 否   | 通知副标题（这个参数客观来讲其实没必要，传也行）                                 |
 | body          | string | 是   | 通知内容                                                                         |
-| category      | string | 否   | 通知类型，可选值：`info`（普通通知）、`error`（错误通知）、`warning`（警告通知） |
+| category      | string | 是   | 通知类型，可选值：`info`（普通通知）、`error`（错误通知）、`warning`（警告通知） |
 | cover         | string | 否   | 通知封面图片链接                                                                 |
 | sender_avatar | string | 否   | 发送者头像图片链接，如果不传这一项或者则只显示应用图标                           |
 
@@ -50,16 +50,116 @@ if __name__ == "__main__":
 
 返回参数：
 
-| 参数名  | 类型   | 说明     |
-| ------- | ------ | -------- |
-| success | 布尔   | 是否成功 |
-| message | string | 具体信息 |
+| 参数名          | 类型 | 说明          |
+| --------------- | ---- | ------------- |
+| notification_id | int  | 添加的通知 ID |
 
 返回值范例：
 
 ```json
 {
-    "success": true,
-    "message": "Success"
+	"notification_id": 1
+}
+```
+
+## 添加任务
+
+链接：`/task/add`
+
+请求方式：`POST`
+
+请求参数（JSON 体）：
+
+| 参数名      | 类型   | 必填 | 说明     |
+| ----------- | ------ | ---- | -------- |
+| title       | string | 是   | 任务标题 |
+| description | string | 是   | 任务描述 |
+
+请求范例：
+
+```python
+import httpx
+
+async def main():
+    with httpx.Client() as client:
+        response = client.post(
+            "https://api.receiver.qingyon.com/task/add",
+            json={
+                "title": "测试任务",
+                "description": "测试任务详情
+            },
+            headers={"API-KEY": "你的apikey"},
+        )
+        print(response.json())
+
+if __name__ == "__main__":
+    import asyncio
+
+    asyncio.run(main())
+```
+
+返回参数：
+
+| 参数名  | 类型 | 说明          |
+| ------- | ---- | ------------- |
+| task_id | 整型 | 添加的任务 ID |
+
+返回值范例：
+
+```json
+{
+	"task_id": 1
+}
+```
+
+## 绑定任务到通知
+
+链接：`/task/bind`
+
+请求方式：`POST`
+
+请求参数（JSON 体）：
+
+| 参数名          | 类型 | 必填 | 说明    |
+| --------------- | ---- | ---- | ------- |
+| task_id         | int  | 是   | 任务 ID |
+| notification_id | int  | 是   | 通知 ID |
+
+请求范例：
+
+```python
+import httpx
+
+async def main():
+    with httpx.Client() as client:
+        response = client.post(
+            "https://api.receiver.qingyon.com/tp/send",
+            json={
+                "task_id": "任务ID",
+                "notification_id": "通知ID"
+            },
+            headers={"API-KEY": "你的apikey"},
+        )
+        print(response.json())
+
+if __name__ == "__main__":
+    import asyncio
+
+    asyncio.run(main())
+```
+
+返回参数：
+
+| 参数名  | 类型    | 说明     |
+| ------- | ------- | -------- |
+| message | string  | 具体信息 |
+| success | boolean | 是否成功 |
+
+返回值范例：
+
+```json
+{
+	"message": "绑定任务成功",
+	"success": true
 }
 ```
